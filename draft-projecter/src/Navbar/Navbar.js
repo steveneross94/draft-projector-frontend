@@ -7,10 +7,9 @@ import { Link } from 'react-router-dom'
 
      return (
        <div className="navbar">
-          <Link to='/'>🏈&nbsp;Home</Link>
+          <Link to='/'>Home</Link>
           <Link to='/login'>Login</Link>
           <Link to='/users/:id'>User Page</Link>
-          <Link to='/users/:id/teams'>Teams</Link>
        </div>
      )
    

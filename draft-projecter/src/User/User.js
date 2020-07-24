@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
+import EditForm from '../Forms/EditForm'
+import PlayersContainer from '../containers/PlayersContainer'
 
 
-const userUrl = 'http::localhost:3000/api/v1/'
+const userUrl = 'http://localhost:3001/api/v1/users'
 
 class Auth extends React.Component {
   state = {
@@ -20,20 +22,25 @@ class Auth extends React.Component {
   // this.props.match.params.id NOTE THAT THIS ID IS A STRING
   
 
-  // componentDidMount(){
-  //   this.fetchUser()
-  // }
+  componentDidMount(){
+    this.fetchUser()
+  }
 
   fetchUser = () => {
     const { id } = this.props.match.params
     fetch(`${userUrl}/${id}`)
     .then(res => res.json())
     .then(userData => {
+      console.log(userData);
       this.setState({
+        isEditUser: false,
         username: userData.username,
-        validationPassword: userData.password,
         name: userData.name,
         favTeam: userData.fav_team,
+        validationPassword: userData.password, 
+        newPassword: '',
+        confirmation: '',
+        currentPassword: '',
         id: userData.id
       })
     })
@@ -49,8 +56,8 @@ class Auth extends React.Component {
   handleSubmit = e => {
     e.preventDefault()
       const { id } = this.props.match.params
-      const { isEditUser, name, favTeam, newPassword, confirmation, username } = this.state;
-      if (isEditUser) {
+      const { name, favTeam, newPassword, confirmation, username, validationPassword, currentPassword } = this.state;
+      if (validationPassword === currentPassword && newPassword === confirmation) {
         fetch(`${userUrl}/${id}`, {
           method: 'PATCH',
           headers: {
@@ -65,11 +72,7 @@ class Auth extends React.Component {
           })
         })
         .then(res => res.json())
-        .then(userData => userData)
-      } else {
-        fetch(userUrl)
-        .then(res => res.json())
-        .then(userData => {
+        .then(userData => 
           this.setState({
             isEditUser: false,
             username: userData.username,
@@ -81,8 +84,11 @@ class Auth extends React.Component {
             currentPassword: '',
             id: userData.id
           })
-        })
-      }
+          )
+       } else {
+        this.fetchUser()
+        alert('Must Enter Current Password and New Passwords Must Match')
+  }
   }
 
   renderUserPage = () => {
@@ -96,34 +102,7 @@ class Auth extends React.Component {
       )
   }
 
-  renderEditForm = () => {
-      const { username, currentPassword, newPassword, name, confirmation, favTeam } = this.state;
-      return (
-          <> 
-            <form onSubmit={this.handleSubmit}>
-              <label>Your Name:&nbsp;
-              <input name="name" placeholder="Name or Nickname" value={name} onChange={this.handleChange}/>
-              </label><br/>
-              <label>&nbsp;Username:&nbsp;
-              <input name="username" placeholder="Username" value={username} onChange={this.handleChange}/>
-              </label><br/>
-              <label>Current Password:&nbsp;
-              <input name="currentPassword" placeholder="Password" type="password" value={currentPassword} onChange={this.handleChange}/>
-              </label><br/>
-              <label>New Password:&nbsp;
-              <input name="newPassword" placeholder="New Password"  type="password" value={newPassword} onChange={this.handleChange}/>
-              </label><br/>
-              <label>Confirm New Password:&nbsp;
-              <input name="confirmation" placeholder="Confirm new Password"  type="password" value={confirmation} onChange={this.handleChange}/>
-              </label><br/>
-              <label>Your Team:&nbsp;
-              <input name="favTeam" placeholder="Your Favorite Team"  type="text" value={favTeam} onChange={this.handleChange}/>
-              </label><br/>
-              <button type="submit" value="Submit">Submit</button>
-          </form>
-          </>
-      )
-  }
+
 
   deleteUser = () => {
     const { id } = this.props.match.params
@@ -135,12 +114,13 @@ class Auth extends React.Component {
   }
 
   render(){
-      let { isEditUser } = this.state;
-      // console.log('IN AUTH', this.props.history) // routerProps are POWERFUL!!!
+    let { isEditUser, username, currentPassword, newPassword, name, confirmation, favTeam } = this.state;
+    // console.log('IN AUTH', this.props.history) // routerProps are POWERFUL!!!
       return (
-          <div className="simple-flex-col">
+        <div className='flex container'>
+            <div className="flex item 1">
               <h1>{isEditUser ? 'Edit Your Account' : 'Account Information'}</h1>
-              { isEditUser ? this.renderEditForm() : this.renderUserPage() }
+              { isEditUser ? <EditForm  username={username} currentPassword={currentPassword} newPassword={newPassword} name={name} confirmation={confirmation} favTeam={favTeam} handleSubmit={this.handleSubmit} handleChange={this.handleChange}/> : this.renderUserPage() }
               <br/>
               <br/>
               { !isEditUser && <button onClick={this.linkToTeams}>Go To Your Draft Budgets</button>}
@@ -158,6 +138,12 @@ class Auth extends React.Component {
                 <button onClick={this.deleteUser}>Delete this Account</button>
               </>}
           </div>
+          <div className="flex item 2"> 
+                <div>
+                  <PlayersContainer />
+                </div>
+          </div>      
+        </div>
       )
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const userUrl = 'http::localhost:3000/api/v1/'
+const userUrl = 'http://localhost:3001/api/v1/users'
 
 class Auth extends React.Component {
   state = {
@@ -21,7 +21,7 @@ class Auth extends React.Component {
     e.preventDefault()
       const { isNewUser, name, favTeam, password, confirmation, username } = this.state;
       if (isNewUser) {
-        if (password === confirmation){
+        if (password !== confirmation){
           alert('Your passwords did not match!')
         } else {
             fetch(userUrl, {
@@ -39,7 +39,7 @@ class Auth extends React.Component {
             })
             .then(res => res.json())
             .then(userData => { 
-              // userData
+              // console.log(userData)
               this.props.history.push(`/users/${userData.id}`) 
             })
           }
@@ -48,7 +48,8 @@ class Auth extends React.Component {
         .then(res => res.json())
         .then(userData => {
           let thisUser = userData.find(user => user.username === username)
-          this.props.history.push(`/users/${userData.id}`) 
+          // console.log(userData, thisUser);
+          this.props.history.push(`/users/${thisUser.id}`) 
         })
       }
 

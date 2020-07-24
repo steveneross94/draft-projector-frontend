@@ -2,7 +2,10 @@
   text-align: center;
 }
 
-.App-logo {
+
+
+
+  .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -37,7 +40,6 @@
   }
 }
 
-
 .navbar {
   background-color: #AD47F4;
   display: flex;
@@ -50,3 +52,18 @@
 .navbar > a {
   color: whitesmoke
 }
+
+.flex.container {
+  display: flex;
+  justify-content: space-evenly;
+  
+}
+
+
+
+.flex.item{
+  border-style: solid;
+  border-color: lightblue;
+}
+
+

@@ -14,14 +14,12 @@ import Auth from './Auth/Auth'
 
  class App extends React.Component{ 
   
-  
   render(){  
     return(
       <div>
         <Navbar class="container"/>
         <Switch>
           <Route exact path='/users/:id/teams/:id' component={Team} />
-          <Route exact path='/users/:id/teams' component={Team} />
           <Route exact path='/users/:id' component={User} /> 
           <Route exact path='/login' component={Auth} />
           <Route exact path='/' component={Home} />
@@ -34,11 +32,3 @@ import Auth from './Auth/Auth'
 
 
 export default App;
-
-// function App() {
-// return (
-//   <div className="App">
-//     <PlayersContainer />
-//   </div>
-// );
-// }
