@@ -18,7 +18,7 @@ import Auth from './Auth/Auth'
   render(){  
     return(
       <div>
-        <Navbar />
+        <Navbar class="container"/>
         <Switch>
           <Route exact path='/users/:id/teams/:id' component={Team} />
           <Route exact path='/users/:id/teams' component={Team} />
