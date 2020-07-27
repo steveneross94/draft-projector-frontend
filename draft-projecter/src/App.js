@@ -7,11 +7,13 @@ import './App.css';
 import PlayersContainer from './containers/PlayersContainer'
 import Navbar from './Navbar/Navbar'
 import User from './User/User'
-import Team from './Team/Team'
+import TeamPage from './Team/TeamPage'
 import Home from './Home/Home'
 import Auth from './Auth/Auth'
+import CreateTeam from './Team/CreateTeam'
 
 const initialState = {
+  teamId: null,
   userInfo: {
   userId: null,
   username: '',
@@ -38,15 +40,20 @@ const initialState = {
      this.setState(initialState)
    }
 
+   currentTeam = (id) => {
+     this.setState({teamId: id})
+   }
+
   render(){  
    console.log(this.state)
-   const { userInfo } = this.state
+   const { userInfo, teamId } = this.state
     return(
       <div>
         <Navbar class="container" userInfo={userInfo} logoutUser={this.logoutUser}/>
         <Switch>
-          <Route exact path='/users/:id/teams/:id' render={(routerprops) => <Team {...routerprops} userInfo={userInfo}/>} />
-          <Route exact path='/users/:id' render={(routerprops) => <User {...routerprops} userInfo={userInfo} loginUserInfo={this.loginUserInfo}/>} /> 
+          <Route exact path='/users/:id' render={(routerprops) => <User {...routerprops} userInfo={userInfo} teamId={teamId} loginUserInfo={this.loginUserInfo} currentTeam={this.currentTeam}/>} /> 
+          <Route exact path='/teams/:id' render={(routerprops) => <TeamPage {...routerprops} userInfo={userInfo}/>} teamId={teamId}/>
+          <Route exact path='/teams/new' render={(routerprops) => <CreateTeam {...routerprops} userInfo={userInfo} currentTeam={this.currentTeam}/>} /> 
           <Route exact path='/login' render={(routerprops) => <Auth {...routerprops} loginUserInfo={this.loginUserInfo}/>}/>
           <Route exact path='/' render={(routerprops) => <Home {...routerprops} userInfo={userInfo}/>}/>
         </Switch>
