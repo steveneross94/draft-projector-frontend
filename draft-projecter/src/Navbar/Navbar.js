@@ -12,6 +12,8 @@ import { Link } from 'react-router-dom'
           {props.userInfo.userId 
           ? <Link to='/login' onClick={props.logoutUser}>Logout</Link>
           : <Link to='/login'>Login</Link>}
+          <Link to='/teams'>Create Team</Link>
+          <Link to='/teams/:id'>MyTeam</Link>
        </div>
      )
    

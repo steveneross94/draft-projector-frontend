@@ -53,17 +53,36 @@
   color: whitesmoke
 }
 
-.flex.container {
+.container {
   display: flex;
   justify-content: space-evenly;
+  height: 400px;
   
 }
 
 
 
-.flex.item{
-  border-style: solid;
-  border-color: lightblue;
+.column {
+  display: flex;
+  flex-direction: column;
+
+  overflow: scroll;
+  padding: 0 10px 0 10px 
 }
 
+.player.box {
+  display: flex;
+  flex-direction: column;
+  border: solid;
+  border-color: black;
+  overflow: scroll;
+  padding: 0 10px 0 10px 
+}
+
+
+.team.form {
+  display: flex;
+  flex-direction: column;
+  width: 10%
+}
 

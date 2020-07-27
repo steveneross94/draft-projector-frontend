@@ -1,7 +1,6 @@
 import React from 'react';
+import { userUrl } from '../URLs/urls'
 
-
-const userUrl = 'http://localhost:3000/api/v1/users'
 const initialState = {
   isNewUser: false,
   username: '',
@@ -63,10 +62,11 @@ class Auth extends React.Component {
         } 
       } else {
         fetch(userUrl)
-          .then(res => res.json())
+        .then(res => res.json())
         .then(userData => {
           let thisUser = userData.find(user => user.username === username)
-            if (!!thisUser)  {
+          console.log(thisUser, userData );
+            if (thisUser)  {
               if(thisUser.password === password) {
                 this.props.loginUserInfo(thisUser.id, thisUser.username, thisUser.name, thisUser.fav_team)
                 this.setState(initialState) 
@@ -74,8 +74,7 @@ class Auth extends React.Component {
               } else {
                 alert("Incorrect password for this username")
               }
-            }
-             else {
+            } else {
               alert("This username doesn't exist in our database.")
             }
         })

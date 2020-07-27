@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { playersUrl } from '../URLs/urls'
 
 class PlayersContainer extends Component {
 
@@ -11,7 +12,7 @@ class PlayersContainer extends Component {
     }
 
     getAllPlayers = () => {
-        fetch('http://localhost:3001/api/v1/players')
+        fetch(playersUrl)
         .then(r => r.json())
         .then(data => {
             this.setState({

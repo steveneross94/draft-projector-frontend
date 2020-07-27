@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import EditForm from '../Forms/EditForm'
-import PlayersContainer from '../containers/PlayersContainer'
+import PlayersContainer from '../Players/PlayersContainer'
+import { teamUrl, userUrl} from '../URLs/urls'
 
-const userUrl = 'http://localhost:3000/api/v1/users'
 
-class Auth extends React.Component {
+class User extends React.Component {
   state = {
       isEditUser: false,
       username: '',
@@ -15,7 +15,8 @@ class Auth extends React.Component {
       currentPassword: '', 
       newPassword: '',
       validationPassword: '',
-      id: ''
+      id: '',
+      team: []
   }
 
   // this.props.match.params.id NOTE THAT THIS ID IS A STRING
@@ -23,6 +24,14 @@ class Auth extends React.Component {
 
   componentDidMount(){
     this.fetchUser(this.props.userInfo.userId)
+    fetch(teamUrl)
+      .then(r => r.json())
+      .then(team => {
+        let myTeam = team.filter(t => t.user_id === this.props.userInfo.userId)
+        this.setState({
+          team: myTeam
+        })
+      })
   }
 
   fetchUser = (id) => {
@@ -93,13 +102,18 @@ class Auth extends React.Component {
     }
   }
 
+
+
   renderUserPage = () => {
-      const { username, name, favTeam } = this.state;
+      const { username, name, favTeam, team} = this.state;
+      let myTeamUrl = '/teams'
       return (
           <>
             <h2>Name: {name}</h2>
             <h2>Username: {username}</h2>
             <h2>Favorite Team: {favTeam}</h2>
+            {this.state.team.length ? team.map(team => <Link to={myTeamUrl+`/${team.id}`} onClick={() => this.props.currentTeam(team.id)}>{team.name}</Link>) : <Link to='/teams'>Create Team</Link>}
+            
           </>
       )
   }
@@ -119,10 +133,10 @@ class Auth extends React.Component {
     let { isEditUser, username, currentPassword, newPassword, name, confirmation, favTeam } = this.state;
     // console.log('IN AUTH', this.props.history) // routerProps are POWERFUL!!!
       return (
-        <div className='flex container'>
+        <div className='container'>
           {this.props.userInfo.userId
            ?<> 
-            <div className="flex item 1">
+            <div className="column">
                 <h1>{isEditUser ? 'Edit Your Account' : 'Account Information'}</h1>
                 { isEditUser ? <EditForm  username={username} currentPassword={currentPassword} newPassword={newPassword} name={name} confirmation={confirmation} favTeam={favTeam} handleSubmit={this.handleSubmit} handleChange={this.handleChange}/> : this.renderUserPage() }
                 <br/>
@@ -142,7 +156,7 @@ class Auth extends React.Component {
                   <button onClick={this.deleteUser}>Delete this Account</button>
                 </>}
             </div>
-            <div className="flex item 2"> 
+            <div className="column"> 
                   <div>
                     <PlayersContainer />
                   </div>
@@ -159,7 +173,7 @@ class Auth extends React.Component {
   }
 }
 
-export default Auth;
+export default User;
 
 
 
