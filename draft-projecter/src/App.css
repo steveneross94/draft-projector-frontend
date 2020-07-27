@@ -53,17 +53,21 @@
   color: whitesmoke
 }
 
-.flex.container {
+.content {
   display: flex;
   justify-content: space-evenly;
-  
+  height: 600px
 }
 
 
 
-.flex.item{
+.column{
+  display: flex;
   border-style: solid;
   border-color: lightblue;
+  flex-direction: column;
+  overflow: scroll;
+  
 }
 
 

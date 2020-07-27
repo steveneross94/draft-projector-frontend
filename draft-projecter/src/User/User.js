@@ -117,8 +117,8 @@ class Auth extends React.Component {
     let { isEditUser, username, currentPassword, newPassword, name, confirmation, favTeam } = this.state;
     // console.log('IN AUTH', this.props.history) // routerProps are POWERFUL!!!
       return (
-        <div className='flex container'>
-            <div className="flex item 1">
+        <div className='content'>
+            <div className="column">
               <h1>{isEditUser ? 'Edit Your Account' : 'Account Information'}</h1>
               { isEditUser ? <EditForm  username={username} currentPassword={currentPassword} newPassword={newPassword} name={name} confirmation={confirmation} favTeam={favTeam} handleSubmit={this.handleSubmit} handleChange={this.handleChange}/> : this.renderUserPage() }
               <br/>
@@ -138,7 +138,7 @@ class Auth extends React.Component {
                 <button onClick={this.deleteUser}>Delete this Account</button>
               </>}
           </div>
-          <div className="flex item 2"> 
+          <div className="column"> 
                 <div>
                   <PlayersContainer />
                 </div>

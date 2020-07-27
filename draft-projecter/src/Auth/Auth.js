@@ -48,8 +48,8 @@ class Auth extends React.Component {
         .then(res => res.json())
         .then(userData => {
           let thisUser = userData.find(user => user.username === username)
-          // console.log(userData, thisUser);
-          this.props.history.push(`/users/${thisUser.id}`) 
+          console.log(userData, thisUser);
+          // this.props.history.push(`/users/${thisUser.id}`) 
         })
       }
 
