@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom'
 import EditForm from '../Forms/EditForm'
 import PlayersContainer from '../containers/PlayersContainer'
 
-
-const userUrl = 'http://localhost:3001/api/v1/users'
+const userUrl = 'http://localhost:3000/api/v1/users'
 
 class Auth extends React.Component {
   state = {
@@ -23,15 +22,14 @@ class Auth extends React.Component {
   
 
   componentDidMount(){
-    this.fetchUser()
+    this.fetchUser(this.props.userInfo.userId)
   }
 
-  fetchUser = () => {
-    const { id } = this.props.match.params
+  fetchUser = (id) => {
+    // const { id } = this.props.match.params
     fetch(`${userUrl}/${id}`)
     .then(res => res.json())
     .then(userData => {
-      console.log(userData);
       this.setState({
         isEditUser: false,
         username: userData.username,
@@ -57,6 +55,10 @@ class Auth extends React.Component {
     e.preventDefault()
       const { id } = this.props.match.params
       const { name, favTeam, newPassword, confirmation, username, validationPassword, currentPassword } = this.state;
+      let patchPassword = newPassword 
+      if (newPassword === '') {
+        patchPassword = validationPassword
+      }
       if (validationPassword === currentPassword && newPassword === confirmation) {
         fetch(`${userUrl}/${id}`, {
           method: 'PATCH',
@@ -66,13 +68,13 @@ class Auth extends React.Component {
           },
           body: JSON.stringify({
             username,
-            password: newPassword,
+            password: patchPassword,
             name,
             fav_team: favTeam
           })
         })
         .then(res => res.json())
-        .then(userData => 
+        .then(userData => {
           this.setState({
             isEditUser: false,
             username: userData.username,
@@ -84,11 +86,11 @@ class Auth extends React.Component {
             currentPassword: '',
             id: userData.id
           })
-          )
+          this.props.loginUserInfo(userData.id, userData.username, userData.name, userData.fav_team)
+        })
        } else {
-        this.fetchUser()
-        alert('Must Enter Current Password and New Passwords Must Match')
-  }
+        alert('Must enter your current password and any new passwords must match. If you do not enter a new password, you will keep your current password.')
+    }
   }
 
   renderUserPage = () => {
@@ -118,31 +120,40 @@ class Auth extends React.Component {
     // console.log('IN AUTH', this.props.history) // routerProps are POWERFUL!!!
       return (
         <div className='flex container'>
+          {this.props.userInfo.userId
+           ?<> 
             <div className="flex item 1">
-              <h1>{isEditUser ? 'Edit Your Account' : 'Account Information'}</h1>
-              { isEditUser ? <EditForm  username={username} currentPassword={currentPassword} newPassword={newPassword} name={name} confirmation={confirmation} favTeam={favTeam} handleSubmit={this.handleSubmit} handleChange={this.handleChange}/> : this.renderUserPage() }
-              <br/>
-              <br/>
-              { !isEditUser && <button onClick={this.linkToTeams}>Go To Your Draft Budgets</button>}
-              <br/>
-              <br/>
-              {isEditUser
-                ? <h2>Go Back to Your Page</h2>
-                : <h2>Edit or Cancel Your Account</h2>}
-              <button onClick={this.toggleEditButton}>{isEditUser ? "Stop Edit" : "Edit"}</button>
-              <br/>
-              <br/>
-              { isEditUser && 
-              <>
-                <h2>Cancel Your Account</h2>
-                <button onClick={this.deleteUser}>Delete this Account</button>
-              </>}
-          </div>
-          <div className="flex item 2"> 
-                <div>
-                  <PlayersContainer />
-                </div>
-          </div>      
+                <h1>{isEditUser ? 'Edit Your Account' : 'Account Information'}</h1>
+                { isEditUser ? <EditForm  username={username} currentPassword={currentPassword} newPassword={newPassword} name={name} confirmation={confirmation} favTeam={favTeam} handleSubmit={this.handleSubmit} handleChange={this.handleChange}/> : this.renderUserPage() }
+                <br/>
+                <br/>
+                { !isEditUser && <button onClick={this.linkToTeams}>Go To Your Draft Budgets</button>}
+                <br/>
+                <br/>
+                {isEditUser
+                  ? <h2>Go Back to Your Page</h2>
+                  : <h2>Edit or Cancel Your Account</h2>}
+                <button onClick={this.toggleEditButton}>{isEditUser ? "Stop Edit" : "Edit"}</button>
+                <br/>
+                <br/>
+                { isEditUser && 
+                <>
+                  <h2>Cancel Your Account</h2>
+                  <button onClick={this.deleteUser}>Delete this Account</button>
+                </>}
+            </div>
+            <div className="flex item 2"> 
+                  <div>
+                    <PlayersContainer />
+                  </div>
+            </div>
+          </>
+          :<> 
+            <h2>You must login to see your User Page </h2> 
+            <br/><br/>
+            <Link to='/login'>Click here to login or sign up!</Link>
+          </>      
+          }     
         </div>
       )
   }

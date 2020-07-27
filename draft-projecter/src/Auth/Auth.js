@@ -1,6 +1,7 @@
 import React from 'react';
 
-const userUrl = 'http://localhost:3001/api/v1/users'
+
+const userUrl = 'http://localhost:3000/api/v1/users'
 const initialState = {
   isNewUser: false,
   username: '',
@@ -9,8 +10,10 @@ const initialState = {
   name: '',
   favTeam: ''
 }
+
 class Auth extends React.Component {
   state = initialState
+  
 
   toggleNewUser = () => this.setState(prevState => ({ isNewUser: !prevState.isNewUser, username: '', password: '', name: '', confirmation: '' }))
 
@@ -23,7 +26,8 @@ class Auth extends React.Component {
         if (password !== confirmation){
           alert('Your passwords did not match!')
         } else {
-          this.fetchUserData()
+          fetch(userUrl)
+          .then(res => res.json())
           .then(data => {
             let match = false
             data.forEach(user => {
@@ -50,19 +54,23 @@ class Auth extends React.Component {
               .then(res => res.json())
               .then(userData => { 
                 // console.log(userData)
+                this.props.loginUserInfo(userData.id, userData.username, userData.name, userData.fav_team)
+                this.setState(initialState) 
                 this.props.history.push(`/users/${userData.id}`) 
               })
             }
           })
         } 
       } else {
-        this.fetchUserData()
+        fetch(userUrl)
+          .then(res => res.json())
         .then(userData => {
           let thisUser = userData.find(user => user.username === username)
             if (!!thisUser)  {
               if(thisUser.password === password) {
-                this.props.history.push(`/users/${thisUser.id}`)
+                this.props.loginUserInfo(thisUser.id, thisUser.username, thisUser.name, thisUser.fav_team)
                 this.setState(initialState) 
+                this.props.history.push(`/users/${thisUser.id}`)
               } else {
                 alert("Incorrect password for this username")
               }
@@ -74,10 +82,7 @@ class Auth extends React.Component {
       }
   }
 
-  fetchUserData = () => {
-    fetch(userUrl)
-    .then(res => res.json())
-  }
+  
 
   renderLogin = () => {
       const { username, password } = this.state;
