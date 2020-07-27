@@ -1,17 +1,16 @@
 import React from 'react';
 
 const userUrl = 'http://localhost:3001/api/v1/users'
-
+const initialState = {
+  isNewUser: false,
+  username: '',
+  password: '',
+  confirmation: '',
+  name: '',
+  favTeam: ''
+}
 class Auth extends React.Component {
-  state = {
-      isNewUser: false,
-      username: '',
-      password: '',
-      confirmation: '',
-      name: '',
-      favTeam: ''
-
-  }
+  state = initialState
 
   toggleNewUser = () => this.setState(prevState => ({ isNewUser: !prevState.isNewUser, username: '', password: '', name: '', confirmation: '' }))
 
@@ -24,35 +23,60 @@ class Auth extends React.Component {
         if (password !== confirmation){
           alert('Your passwords did not match!')
         } else {
-            fetch(userUrl, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-              },
-              body: JSON.stringify({
-                username,
-                password,
-                name,
-                fav_team: favTeam
+          this.fetchUserData()
+          .then(data => {
+            let match = false
+            data.forEach(user => {
+              if (user.username === username) {
+                match = true
+              }
+            })
+            if (match) {
+              alert('This entered username is already taken. Try again')
+            }  else {
+              fetch(userUrl, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json'
+                },
+                body: JSON.stringify({
+                  username,
+                  password,
+                  name,
+                  fav_team: favTeam
+                })
               })
-            })
-            .then(res => res.json())
-            .then(userData => { 
-              // console.log(userData)
-              this.props.history.push(`/users/${userData.id}`) 
-            })
-          }
+              .then(res => res.json())
+              .then(userData => { 
+                // console.log(userData)
+                this.props.history.push(`/users/${userData.id}`) 
+              })
+            }
+          })
+        } 
       } else {
-        fetch(userUrl)
-        .then(res => res.json())
+        this.fetchUserData()
         .then(userData => {
           let thisUser = userData.find(user => user.username === username)
-          // console.log(userData, thisUser);
-          this.props.history.push(`/users/${thisUser.id}`) 
+            if (!!thisUser)  {
+              if(thisUser.password === password) {
+                this.props.history.push(`/users/${thisUser.id}`)
+                this.setState(initialState) 
+              } else {
+                alert("Incorrect password for this username")
+              }
+            }
+             else {
+              alert("This username doesn't exist in our database.")
+            }
         })
       }
+  }
 
+  fetchUserData = () => {
+    fetch(userUrl)
+    .then(res => res.json())
   }
 
   renderLogin = () => {
