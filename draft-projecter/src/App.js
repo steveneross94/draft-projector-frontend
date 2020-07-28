@@ -14,12 +14,12 @@ import CreateTeam from './Team/CreateTeam'
 
 const initialState = {
   teamId: null,
+  players: [],
   userInfo: {
   userId: null,
   username: '',
   name: '',
-  favTeam: '',
-  players: []
+  favTeam: ''
    }
 }
  class App extends React.Component{ 
@@ -53,23 +53,29 @@ const initialState = {
 }
 
    logoutUser = () => {
-     this.setState(initialState)
+     this.setState({
+      teamId: null,
+      userInfo: {
+      userId: null,
+      username: '',
+      name: '',
+      favTeam: ''
+       }})
    }
 
    currentTeam = (id) => {
      this.setState({teamId: id})
-     console.log('clicked');
    }
 
   render(){  
-   console.log(this.state)
+   console.log(this.state.players)
    const { userInfo, teamId, players } = this.state
     return(
       <div>
         <Navbar class="container" userInfo={userInfo} logoutUser={this.logoutUser}/>
         <Switch>
           <Route exact path='/users/:id' render={(routerprops) => <User {...routerprops} userInfo={userInfo} teamId={teamId} loginUserInfo={this.loginUserInfo} currentTeam={this.currentTeam} />}/> 
-          <Route exact path='/teams/:id' render={(routerprops) => <TeamPage {...routerprops} players={this.state.players} userInfo={userInfo}/>} teamId={teamId}/>
+          <Route exact path='/teams/:id' render={(routerprops) => <TeamPage {...routerprops} players={players} userInfo={userInfo} teamId={teamId}/>}/>
           <Route exact path='/teams' render={(routerprops) => <CreateTeam {...routerprops} userInfo={userInfo} currentTeam={this.currentTeam}/>} /> 
           <Route exact path='/login' render={(routerprops) => <Auth {...routerprops} loginUserInfo={this.loginUserInfo}/>}/>
           <Route exact path='/' render={(routerprops) => <Home {...routerprops} userInfo={userInfo}/>}/>

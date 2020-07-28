@@ -41,49 +41,54 @@ class TeamPage extends React.Component {
       num_k: team.num_k, 
       num_def: team.num_def, 
       num_superflex: team.num_superflex, 
-      num_bench: team.num_bench
+      num_bench: team.num_bench,
+      playersPool: []
     })
   })
+  this.getRosterPlayers()
 }
 
-// getAllPlayers = () => {
-//   let booleanMatch = false
-//   fetch(rostersUrl)
-//   .then(res=>res.json())
-//   .then(playersData => {
-//     playersData.forEach(player => {
-//       if (this.props.match.params.id === player.team_id) {
-//         booleanMatch = true
-//         this.setState({playersPool: [...this.state.playersPool, player]})
-//       }
-//     })
-//   })
-//   if (!booleanMatch) {
-//     fetch(playersUrl)
-//     .then(r => r.json())
-//     .then(data => {
-//       data.forEach(player => {
-//         fetch(rostersUrl, {
-//           method: 'POST',
-//           headers: {
-//             "Content-Type": "application/json"
-//           },
-//           body: JSON.stringify({
-//             team_id: parseInt(this.props.match.params.id),
-//             player_id: player.id,
-//             user_price: player.default_price,
-//             status: "undrafted",
-//             player_name: player.name,
-//             player_position: player.position,
-//             player_team: player.team
-//           })
-//         })
-//         .then(res => res.json())
-//         .then(player => this.setState({playersPool: [...this.state.playersPool, player]}))
-//       })
-//     })
-//   }
-// }
+ 
+
+getRosterPlayers = () => {
+  let booleanMatch = false
+  fetch(rostersUrl)
+  .then(res=>res.json())
+  .then(rosterData => {
+    // let thisTeam = rosterData.filter(player => player.id =)
+      rosterData.forEach(player => {
+       
+        if (parseInt(this.props.match.params.id) === parseInt(player.team_id)) {
+          console.log('hit')
+          booleanMatch = true
+          this.setState({playersPool: [...this.state.playersPool, player]})
+        }
+      })
+
+  })
+  if (!booleanMatch) {
+    console.log('another fetch')
+    this.props.players.forEach(player => {
+        fetch(rostersUrl, {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            team_id: parseInt(this.props.match.params.id),
+            player_id: parseInt(player.id),
+            user_price: parseInt(player.default_price),
+            status: "undrafted",
+            player_name: player.name,
+            player_position: player.position,
+            player_team: player.team
+          })
+        })
+        .then(res => res.json())
+        .then(player => this.setState({playersPool: [...this.state.playersPool, player]}))
+    })
+  }
+}
 
 
 handleClick = (e) => {
@@ -92,14 +97,15 @@ handleClick = (e) => {
 
 render() {
   
+  
   return (
   <div className="container">
       <div className="column">User: {this.props.userInfo.username}
         <div>Current Fantasy Team: {this.state.name}</div>
         <div>Key: Player Name, Position, Team, Default Price</div>
-        <div className="player box">{this.props.players ? this.props.players.map(player => 
+        <div className="player box">{this.state.playersPool ? this.state.playersPool.map(player => 
                 <div key={player.id}>
-                    <div name={player.name} position={player.position} team={player.team} price={player.default_price} onClick={this.handleClick}><strong>{player.name}</strong>, {player.position}, {player.team}, {player.default_price}</div>
+                    <div name={player.player_name} position={player.player_position} team={player.player_team} price={player.user_price} onClick={this.handleClick}><strong>{player.player_name}</strong>, {player.player_position}, {player.player_team}, {player.user_price}</div>
                 </div>
                     ) : 'loading...' }</div>
       </div>
