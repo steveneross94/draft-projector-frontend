@@ -141,9 +141,6 @@ class User extends React.Component {
                 { isEditUser ? <EditForm  username={username} currentPassword={currentPassword} newPassword={newPassword} name={name} confirmation={confirmation} favTeam={favTeam} handleSubmit={this.handleSubmit} handleChange={this.handleChange}/> : this.renderUserPage() }
                 <br/>
                 <br/>
-                { !isEditUser && <button onClick={this.linkToTeams}>Go To Your Draft Budgets</button>}
-                <br/>
-                <br/>
                 {isEditUser
                   ? <h2>Go Back to Your Page</h2>
                   : <h2>Edit or Cancel Your Account</h2>}
