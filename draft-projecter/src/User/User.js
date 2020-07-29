@@ -111,7 +111,7 @@ class User extends React.Component {
           <>
             <h2>Name: {name}</h2>
             <h2>Username: {username}</h2>
-            <h2>Favorite Team: {favTeam}</h2>
+            <h2>Favorite Team: {favTeam.split('+').join(' ')}</h2>
             {this.state.team.length ? team.map(team => <Link to={myTeamUrl+`/${team.id}`} onClick={() => this.props.currentTeam(team.id)}>{team.name}</Link>) : <Link to='/teams'>Create Team</Link>}
             
           </>
