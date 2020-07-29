@@ -1,5 +1,6 @@
 import React from 'react';
 import { userUrl } from '../URLs/urls'
+import TeamSelectBox from '../Forms/TeamSelectBox'
 
 const initialState = {
   isNewUser: false,
@@ -117,9 +118,7 @@ class Auth extends React.Component {
               <label>&nbsp;&nbsp;Password:&nbsp;
               <input name="confirmation" placeholder="Confirm Password"  type="password" value={confirmation} onChange={this.handleChange}/>
               </label><br/>
-              <label>Your Team:&nbsp;
-              <input name="favTeam" placeholder="Your Favorite Team"  type="text" value={favTeam} onChange={this.handleChange}/>
-              </label><br/>
+              <TeamSelectBox favTeam={favTeam} handleChange={this.handleChange}/>
               <button type="submit" value="Submit">Submit</button>
           </form>
           </>

@@ -3,6 +3,8 @@ import RenderTeam from './RenderTeam'
 import { playersUrl, teamUrl, rostersUrl } from '../URLs/urls'
 import EditTeam from './EditTeam'
 import MyTeam from './MyTeam'
+import SearchByName from './SearchByName'
+import SearchByPrice from './SearchByPrice'
 
 
 const initialState={
@@ -21,7 +23,8 @@ const initialState={
   selectedPlayer: [],
   status: "undrafted",
   searchName: '',
-  searchPrice: ''
+  searchPrice: 0,
+  searchPriceStatus: 'byMinPrice'
 }
 
 
@@ -192,8 +195,8 @@ backToPlayerPool = id => {
 }
 
 
-handleClick = (e) => {
-  let playerId = parseInt(e.target.id)
+handleClick = (id) => {
+  let playerId = parseInt(id)
   let selectedPlayer = this.state.playersPool.find(p => p.id === playerId)
   selectedPlayer.status = "queue"
   console.log(selectedPlayer);
@@ -269,7 +272,7 @@ handleNewPrice = (player) => {
 
 handleChange = (e) => {
   this.setState({
-    status: e.target.value
+    [e.target.name]: e.target.value
   })
 }
 
@@ -290,9 +293,27 @@ removeFromMyTeam = (player) => {
   this.fetchNewTeamBudget(newBudget)
 }
 
+
+
+filterAndSearchPlayers = () => {
+  const { status, searchName, searchPrice, searchPriceStatus } = this.state
+  let filteredPlayers = [...this.state.playersPool].filter(player => player.status === this.state.status)
+  let thisSearchPrice = searchPrice
+  if (searchPrice === '') {
+    thisSearchPrice = 0
+  }
+  if (searchPriceStatus === 'byMinPrice') {
+    return filteredPlayers.filter(player => player.player_name.toLowerCase().includes(searchName) && parseInt(player.user_price) >= parseInt(thisSearchPrice))
+  } else if (searchPriceStatus === "byMaxPrice") {
+    return filteredPlayers.filter(player => player.player_name.toLowerCase().includes(searchName) && parseInt(player.user_price) <= parseInt(thisSearchPrice))
+  } 
+}
+
+
 render() { 
+  const {searchPrice, searchName, searchPriceStatus } = this.state
   let selectedPlayers = this.state.playersPool.filter(player => player.status === "queue")
-  let currentPlayerPool = [...this.state.playersPool].filter(player => player.status === this.state.status)
+  let currentPlayerPool = this.filterAndSearchPlayers()
   let myPlayers = this.state.playersPool.filter(player => player.status === "myteam")
   let editedPlayers = this.state.playersPool.find(player => player.status === "edit")
   console.log(selectedPlayers, editedPlayers);
@@ -309,20 +330,20 @@ render() {
                               <button onClick={() => this.sendToEdit(player.id)}>Edit Price</button><button onClick={() => this.backToPlayerPool(player.id)}>Remove From Queue</button>
                                 </div>
                               )}</div>
+            <SearchByName searchName={searchName} handleChange={this.handleChange}/>
+            <SearchByPrice searchPrice={searchPrice} searchPriceStatus={searchPriceStatus} handleChange={this.handleChange}/>
             <label>Filter Players</label>
             <select name="status" value={this.state.status} onChange={this.handleChange}>
                                 <option value="undrafted">Undrafted</option>
                                 <option value="anotherteam">Other Teams</option>
                             </select>
         <div className="player box">{currentPlayerPool ? currentPlayerPool.sort((p1,p2) => p1.user_price > p2.user_price ? -1 : 1).map(player => 
-                <div key={player.id}>
+                <div key={player.id} id={player.id} onClick={() => this.handleClick(player.id)}>
                     <div 
-                        id={player.id}
                         name={player.player_name} 
                         position={player.player_position} 
                         team={player.player_team} 
                         price={player.user_price} 
-                        onClick={this.handleClick}
                       >
                         <strong>{player.player_name}</strong>, 
                         {player.player_position}, 

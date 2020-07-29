@@ -3,14 +3,13 @@ import React from 'react';
 class RenderTeam extends React.Component {
 
 render(){
-    const { budget, num_qb, num_rb, num_wr, num_te, num_flex, num_superflex, num_k, num_def, num_bench } = this.props
+    const { myPlayers, budget, num_qb, num_rb, num_wr, num_te, num_flex, num_superflex, num_k, num_def, num_bench } = this.props
+    let sumRoster = num_qb+num_rb+num_wr+num_te+num_flex+num_superflex+num_k+num_def+num_bench 
+    let playersDrafted = myPlayers ? myPlayers.length : 0
+    let budgetPerPlayer = (budget / parseInt(sumRoster) - parseInt(playersDrafted)).toFixed(2)
     return (
         <div>
         <table>
-            <tr>
-                <th>Remaining Budget:</th>
-                <td>${budget}</td>
-            </tr> 
             {num_qb > 0 &&
                 <tr>
                 <th>QB:</th>
@@ -65,6 +64,22 @@ render(){
                 <td>{num_bench}</td>
             </tr> 
             }   
+            <tr>
+                <th>Total Roster Spots:</th>
+                <td>{sumRoster}</td>
+            </tr> 
+            <tr>
+                <th>Players Drafted:</th>
+                <td>{myPlayers ? myPlayers.length : 0}</td>
+            </tr> 
+            <tr>
+                <th>Remaining Auction $:</th>
+                <td>${budget}</td>
+            </tr> 
+            <tr>
+                <th>Remaining $ Per Player:</th>
+                <td>${budgetPerPlayer}</td>
+            </tr> 
         </table>
         </div>
     )
