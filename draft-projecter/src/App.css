@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+body {
+  background-color: #E4E4E1;
+  background-image: radial-gradient(at top center, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.03) 100%), linear-gradient(to top, rgba(255,255,255,0.1) 0%, rgba(143,152,157,0.60) 100%);
+    background-blend-mode: normal, multiply;}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -44,10 +49,6 @@
   flex-wrap: nowrap;
   justify-content: space-around;
   border-radius: 20px;
-}
-
-.navbar > a {
-  color: whitesmoke
 }
 
 .container {
@@ -116,4 +117,55 @@
   flex-direction: column;
   justify-self: center;
   align-items: center;
+}
+
+.article.image {
+
+  height: 300px;
+  width: 450px
+}
+
+.news {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+  border: solid;
+  border-color: black;
+}
+
+.card-body {
+  width: 400px
+}
+
+.container-fluid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.news.card {
+  height: 700px;
+  border-radius: 15px;
+
+}
+
+.card-img.article.image{
+  border-radius: 12px;
+  border: solid black;
+}
+
+.login-footer {
+  height: 70vw
+}
+
+.select.player {
+  height: 70px;
+}
+
+.myteam > ul {
+  list-style-type: none;
+padding-left: 0;
 }

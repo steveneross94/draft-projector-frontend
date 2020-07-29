@@ -4,21 +4,22 @@ import EditForm from '../Forms/EditForm'
 import PlayersContainer from '../Players/PlayersContainer'
 import { teamUrl, userUrl} from '../URLs/urls'
 
+const initialState = {
+    isEditUser: false,
+    username: '',
+    confirmation: '',
+    name: '',
+    favTeam: 'nfl+football',
+    currentPassword: '', 
+    newPassword: '',
+    validationPassword: '',
+    id: '',
+    team: []
+}
 
 class User extends React.Component {
-  state = {
-      isEditUser: false,
-      username: '',
-      confirmation: '',
-      name: '',
-      favTeam: '',
-      currentPassword: '', 
-      newPassword: '',
-      validationPassword: '',
-      id: '',
-      team: []
-  }
 
+  state = initialState
   // this.props.match.params.id NOTE THAT THIS ID IS A STRING
   
 
@@ -111,9 +112,9 @@ class User extends React.Component {
           <>
             <h2>Name: {name}</h2>
             <h2>Username: {username}</h2>
-            <h2>Favorite Team: {favTeam.split('+').join(' ')}</h2>
-            {this.state.team.length ? team.map(team => <Link to={myTeamUrl+`/${team.id}`} onClick={() => this.props.currentTeam(team.id)}>{team.name}</Link>) : <Link to='/teams'>Create Team</Link>}
-            
+            <h2>Favorite Team: {favTeam ? favTeam.split('+').join(' ') : 'loading...'}</h2>
+            {this.state.team.length ? team.map(team => <Link to={myTeamUrl+`/${team.id}`} onClick={() => this.props.currentTeam(team.id)}>{team.name}</Link>) : null}
+            <Link to='/teams'>Create Team</Link>
           </>
       )
   }
@@ -122,8 +123,13 @@ class User extends React.Component {
 
   deleteUser = () => {
     const { id } = this.props.match.params
+    fetch(userUrl+`/${id}`, {
+      method: 'DELETE'
+    })
+    .then(this.props.removeUserFromState())
+    .then(this.props.history.push(`/`))
   }
-
+  
   linkToTeams = () => {
     const { id } = this.props.match.params
     this.props.history.push(`/users/${id}/teams`) 
@@ -132,7 +138,9 @@ class User extends React.Component {
   render(){
     let { isEditUser, username, currentPassword, newPassword, name, confirmation, favTeam } = this.state;
     // console.log('IN AUTH', this.props.history) // routerProps are POWERFUL!!!
+    console.log(this.state);
       return (
+        <>
         <div className='container'>
           {this.props.userInfo.userId
            ?<> 
@@ -166,6 +174,8 @@ class User extends React.Component {
           </div>      
           }     
         </div>
+        <div className='login-footer'></div>
+        </>
       )
   }
 }

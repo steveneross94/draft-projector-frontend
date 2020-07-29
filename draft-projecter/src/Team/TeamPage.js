@@ -303,9 +303,9 @@ filterAndSearchPlayers = () => {
     thisSearchPrice = 0
   }
   if (searchPriceStatus === 'byMinPrice') {
-    return filteredPlayers.filter(player => player.player_name.toLowerCase().includes(searchName) && parseInt(player.user_price) >= parseInt(thisSearchPrice))
+    return filteredPlayers.filter(player => player.player_name.toLowerCase().includes(searchName.toLowerCase()) && parseInt(player.user_price) >= parseInt(thisSearchPrice))
   } else if (searchPriceStatus === "byMaxPrice") {
-    return filteredPlayers.filter(player => player.player_name.toLowerCase().includes(searchName) && parseInt(player.user_price) <= parseInt(thisSearchPrice))
+    return filteredPlayers.filter(player => player.player_name.toLowerCase().includes(searchName.toLowerCase()) && parseInt(player.user_price) <= parseInt(thisSearchPrice))
   } 
 }
 
@@ -318,6 +318,7 @@ render() {
   let editedPlayers = this.state.playersPool.find(player => player.status === "edit")
   console.log(selectedPlayers, editedPlayers);
   return (
+    <>
   <div className="container">
       <div className="column">User: {this.props.userInfo.username}
         <div>Current Fantasy Team: {this.state.name}</div>
@@ -325,18 +326,19 @@ render() {
         <div>Selected Player: {selectedPlayers
                               && selectedPlayers.map(player =>
                               <div>
-                              <button onClick={() => this.changeRemainingBudget(player.id, player.user_price, "playerQueue")}>My Player</button><button onClick={()=>this.addToOpponent(player.id)}>Opponent Player</button>
                               {player.player_name},{player.player_position},{player.player_team},{player.user_price}
-                              <button onClick={() => this.sendToEdit(player.id)}>Edit Price</button><button onClick={() => this.backToPlayerPool(player.id)}>Remove From Queue</button>
+                              <br></br>
+                              <button onClick={() => this.changeRemainingBudget(player.id, player.user_price, "playerQueue")}>My Player</button><button onClick={()=>this.addToOpponent(player.id)}>Opponent Player</button><button onClick={() => this.sendToEdit(player.id)}>Edit Price</button><button onClick={() => this.backToPlayerPool(player.id)}>Remove From Queue</button>
                                 </div>
                               )}</div>
             <SearchByName searchName={searchName} handleChange={this.handleChange}/>
             <SearchByPrice searchPrice={searchPrice} searchPriceStatus={searchPriceStatus} handleChange={this.handleChange}/>
             <label>Filter Players</label>
-            <select name="status" value={this.state.status} onChange={this.handleChange}>
+            <select className='select player' name="status" value={this.state.status} onChange={this.handleChange}>
                                 <option value="undrafted">Undrafted</option>
                                 <option value="anotherteam">Other Teams</option>
                             </select>
+                            <br></br>
         <div className="player box">{currentPlayerPool ? currentPlayerPool.sort((p1,p2) => p1.user_price > p2.user_price ? -1 : 1).map(player => 
                 <div key={player.id} id={player.id} onClick={() => this.handleClick(player.id)}>
                     <div 
@@ -359,6 +361,8 @@ render() {
         <MyTeam myTeam={myPlayers} removeFromMyTeam={this.removeFromMyTeam}/>
       </div>
     </div>
+     <div className='login-footer'></div>
+     </>
   )
 }
 }

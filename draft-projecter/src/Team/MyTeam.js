@@ -6,7 +6,7 @@ function MyTeam({ myTeam, removeFromMyTeam }) {
     let sortedPlayers = myTeam.sort((p1,p2) => playersHash[p1.player_position] > playersHash[p2.player_position] ? -1 : 1)
 
     return (
-        <div>
+        <div className='myteam'>
             <ul>
                 {sortedPlayers.map(player => 
                     <li>{player.player_position} {player.player_name} {player.team} {player.user_price}

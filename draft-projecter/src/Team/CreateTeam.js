@@ -55,6 +55,7 @@ class CreateTeam extends React.Component {
     render() {
         console.log(this.state);
         return (
+            <>
             <div>
                 {this.props.userInfo.userId ? 
                 <form className='team form' onSubmit={(e) => this.handleSubmit(e)}>
@@ -133,6 +134,8 @@ class CreateTeam extends React.Component {
                 </div>      
                 }     
             </div>
+             <div className='login-footer'></div>
+             </>
         )
     }
 }

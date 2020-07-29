@@ -8,7 +8,7 @@ const initialState = {
   password: '',
   confirmation: '',
   name: '',
-  favTeam: ''
+  favTeam: 'nfl+football'
 }
 
 class Auth extends React.Component {
@@ -129,6 +129,7 @@ class Auth extends React.Component {
       let { isNewUser } = this.state;
       // console.log('IN AUTH', this.props.history) // routerProps are POWERFUL!!!
       return (
+        <>
           <div className="simple-flex-col">
               <h3>{isNewUser ? 'Create an Account' : 'Login'}</h3>
               { isNewUser ? this.renderSignup() : this.renderLogin() }
@@ -139,6 +140,8 @@ class Auth extends React.Component {
                 : <h2>New to Budget Your Draft?</h2>}
               <button onClick={this.toggleNewUser}>{isNewUser ? "Login" : "Create an Account"}</button>
           </div>
+          <div className='login-footer'></div>
+          </>
       )
   }
 }
