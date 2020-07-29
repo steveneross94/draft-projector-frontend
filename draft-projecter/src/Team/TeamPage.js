@@ -1,6 +1,5 @@
 import React from 'react';
 import RenderTeam from './RenderTeam'
-import PlayerPool from './PlayerPool'
 import { playersUrl, teamUrl, rostersUrl } from '../URLs/urls'
 import EditTeam from './EditTeam'
 import MyTeam from './MyTeam'

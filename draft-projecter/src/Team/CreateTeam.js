@@ -126,11 +126,11 @@ class CreateTeam extends React.Component {
                 <button type="submit">Submit</button>
                 </form> 
                 : 
-                <> 
+                <div className='login alert'> 
                     <h2>You must login to create a team </h2> 
                     <br/><br/>
                     <Link to='/login'>Click here to login or sign up!</Link>
-                </>      
+                </div>      
                 }     
             </div>
         )

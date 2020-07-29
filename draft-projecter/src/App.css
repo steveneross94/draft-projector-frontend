@@ -2,10 +2,7 @@
   text-align: center;
 }
 
-
-
-
-  .App-logo {
+.App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -56,13 +53,25 @@
 .container {
   display: flex;
   justify-content: space-evenly;
-  
-  
 }
 
-
-
 .column {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  overflow: scroll;
+  padding: 0 10px 0 10px 
+}
+
+.column.one {
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  overflow: scroll;
+  padding: 0 10px 0 10px 
+}
+
+.column.two{
   display: flex;
   flex-direction: column;
   height: 400px;
@@ -86,3 +95,25 @@
   width: 10%
 }
 
+
+.homepage {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+}
+
+
+.simple-flex-col {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+}
+
+.login.alert {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+}

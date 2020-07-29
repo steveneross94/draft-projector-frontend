@@ -136,7 +136,7 @@ class User extends React.Component {
         <div className='container'>
           {this.props.userInfo.userId
            ?<> 
-            <div className="column">
+            <div className="column one">
                 <h1>{isEditUser ? 'Edit Your Account' : 'Account Information'}</h1>
                 { isEditUser ? <EditForm  username={username} currentPassword={currentPassword} newPassword={newPassword} name={name} confirmation={confirmation} favTeam={favTeam} handleSubmit={this.handleSubmit} handleChange={this.handleChange}/> : this.renderUserPage() }
                 <br/>
@@ -153,17 +153,17 @@ class User extends React.Component {
                   <button onClick={this.deleteUser}>Delete this Account</button>
                 </>}
             </div>
-            <div className="column"> 
+            <div className="column two"> 
                   <div>
                     <PlayersContainer />
                   </div>
             </div>
           </>
-          :<> 
+          :<div className='login alert'> 
             <h2>You must login to see your User Page </h2> 
             <br/><br/>
             <Link to='/login'>Click here to login or sign up!</Link>
-          </>      
+          </div>      
           }     
         </div>
       )
