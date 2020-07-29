@@ -4,6 +4,7 @@ const PlayerPool = props => {
 
     return (
         <div>
+        
         </div>
 
     )
