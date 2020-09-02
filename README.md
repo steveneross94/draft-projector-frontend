@@ -25,3 +25,6 @@ Next, follow these steps before running npm start
 ### External Resources for Access
 ---
 You'll need to sign up for news api key (https://newsapi.org/). You will also have to run a gem install for figaro (https://github.com/laserlemon/figaro) and follow the steps to place the API key in the proper .env file
+In doing so, you'll need to remove the following from .gitignore 
+
+`Ignore application configuration /config/application.yml`
